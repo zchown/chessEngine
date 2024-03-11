@@ -25,6 +25,10 @@ pub fn count_bits(bb: Bitboard) -> u32 {
     bb.count_ones()
 }
 
+pub fn get_lsb(bb: Bitboard) -> Square {
+    bb.trailing_zeros() as Square
+}
+
 pub fn get_bit(bb: Bitboard, sq: Square) -> bool {
     bb & (1 << sq) != 0
 }
@@ -50,5 +54,4 @@ pub fn bitboard_to_array(bb: Bitboard) -> [bool; 64] {
     }
     array
 }
-
 
