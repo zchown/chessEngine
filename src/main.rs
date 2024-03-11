@@ -15,8 +15,9 @@ fn main() {
     // for i in 0..64 {
         // board::print_bitboard(at.kings[i]);
     // }
+
     for i in 0..64 {
-        board::print_bitboard(AttackTable::mask_rook_attacks(i));
+        board::print_bitboard(AttackTable::bishop_attacks(i, BB_SQUARES[27]));
     }
 
 }

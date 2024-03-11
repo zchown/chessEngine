@@ -158,5 +158,45 @@ impl AttackTable {
             file += file_dir;
         }
     }
+
+    pub fn calc_attacks_with_blocks(rank_dir: isize, file_dir: isize, target_rank: usize, target_file: usize, attacks: &mut Bitboard, blocks: Bitboard) {
+        let mut rank = (target_rank as isize) + rank_dir;
+        let mut file = (target_file as isize) + file_dir;
+        while (0..=7).contains(&rank) && (0..=7).contains(&file) {
+            let sq = (rank as usize) * 8 + (file as usize);
+            *attacks |= 1 << sq;
+            if get_bit(blocks, sq) {
+                break;
+            }
+            rank += rank_dir;
+            file += file_dir;
+        }
+    }
+
+    pub fn bishop_attacks(sq: Square, blocks: Bitboard) -> Bitboard {
+        let mut attacks: Bitboard = 0;
+
+        let target_rank = sq / 8;
+        let target_file = sq % 8;
+
+        for &(rank_dir, file_dir) in &[(1, 1), (-1, 1), (1, -1), (-1, -1)] {
+            Self::calc_attacks_with_blocks(rank_dir, file_dir, target_rank, target_file, &mut attacks, blocks);
+        }
+
+        attacks
+    }
+
+    pub fn rook_attacks(sq: Square, blocks: Bitboard) -> Bitboard {
+        let mut attacks: Bitboard = 0;
+
+        let target_rank = sq / 8;
+        let target_file = sq % 8;
+
+        for &(rank_dir, file_dir) in &[(1, 0), (-1, 0), (0, 1), (0, -1)] {
+            Self::calc_attacks_with_blocks(rank_dir, file_dir, target_rank, target_file, &mut attacks, blocks);
+        }
+
+        attacks
+    }
 }
 
