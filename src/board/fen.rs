@@ -1,7 +1,7 @@
 use super::defs::{Colors, Pieces, Squares, EMPTY, SQUARE_NAMES};
 
 use crate::{
-    board::{Bitboard, Board},
+    board::{Board},
     defs::{Castling, Square, FEN_START_POSITION, MAX_MOVES},
 };
 

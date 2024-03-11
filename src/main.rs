@@ -9,15 +9,4 @@ use crate::{
 
 
 fn main() {
-    let at = moves::AttackTable::new();
-    // board::print_bitboard(NOT_FIRST_RANK);
-    // board::print_bitboard(NOT_EIGHTH_RANK);
-    // for i in 0..64 {
-        // board::print_bitboard(at.kings[i]);
-    // }
-
-    for i in 0..64 {
-        board::print_bitboard(AttackTable::bishop_attacks(i, BB_SQUARES[27]));
-    }
-
 }

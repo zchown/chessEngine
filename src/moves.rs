@@ -1,6 +1,7 @@
 use crate::{
     board::defs::{Colors, Color, Pieces, Squares, BB_SQUARES, SQUARE_NAMES},
-    board::{clear_bit, get_bit, pop_bit, set_bit, Bitboard, Board},
+    board::{Board},
+    board::bitboard::{Bitboard, get_bit},
     defs::{Castling, NrOf, Piece, Square, EMPTY},
 };
 
