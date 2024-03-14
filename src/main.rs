@@ -11,8 +11,20 @@ use crate::{
 
 
 fn main() {
-    let at = AttackTable::new();
+    // let mut atm = moves::mask_rook_attacks(0);
+    // for i in 0..4095 {
+        // let occ = moves::set_occupancy(i, count_bits(atm) as usize, atm);
+        // print_bitboard(occ);
+    // }
 
-    let atm = AttackTable::mask_rook_attacks(0, 0);
-    let occ = at::set_occupancy(0, count_bits(atm));
+    for r in 0..8 {
+        for f in 0..8 {
+            let sq = r * 8 + f;
+            print!("{:?}, ", count_bits(moves::mask_rook_attacks(sq)));
+        }
+        println!();
+
+
+    }
+
 }
