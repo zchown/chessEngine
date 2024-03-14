@@ -1,3 +1,10 @@
+use crate::{
+    board::defs::{Colors, Color, Pieces, Squares, BB_SQUARES, SQUARE_NAMES},
+    board::{Board},
+    board::bitboard::{Bitboard, get_bit, get_lsb, count_bits, print_bitboard, pop_bit},
+    defs::{Castling, NrOf, Piece, Square, EMPTY},
+};
+
 pub const BISHOP_RELEVANT_BITS: [usize; 64] = [
     6, 5, 5, 5, 5, 5, 5, 6, 
     5, 5, 5, 5, 5, 5, 5, 5, 
@@ -20,25 +27,25 @@ pub const ROOK_RELEVANT_BITS: [usize; 64] = [
     12, 11, 11, 11, 11, 11, 11, 12, 
 ];
 
-struct magic {
-    pub state: u64,
+// sorcerer creates magic
+pub struct Sorcerer {
+    pub state: u32,
 }
 
-impl magic {
-    pub fn new() -> magic {
-        magic {
-            state: 0,
+impl Sorcerer {
+    pub fn new() -> Sorcerer {
+        Sorcerer {
+            state: 1804289383,
         }
     }
 
-
-    pub fn get_random_number(&mut self) -> u64 {
+    pub fn get_random_number(&mut self) -> u32{
         let mut x = self.state;
         x ^= x << 13;
         x ^= x >> 17;
         x ^= x << 5;
         self.state = x;
-        x * 2685821657736338717
+        x
     }
 }
 
@@ -130,3 +137,4 @@ pub fn set_occupancy(index: Bitboard, bits_in_mask: usize, attack_mask: Bitboard
     }
     occ
 }
+
