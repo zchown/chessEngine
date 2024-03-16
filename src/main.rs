@@ -2,6 +2,7 @@ mod board;
 mod defs;
 mod moves;
 mod sorcery;
+mod magics;
 
 use crate::{
     board::defs::{Colors, BB_SQUARES, Squares},
@@ -12,5 +13,5 @@ use crate::{
 
 
 fn main() {
-
+    
 }
