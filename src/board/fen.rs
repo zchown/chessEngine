@@ -1,8 +1,7 @@
-use super::defs::{Colors, Pieces, Squares, EMPTY, SQUARE_NAMES};
-
+use strum::IntoEnumIterator;
 use crate::{
     board::{Board},
-    defs::{Castling, Square, FEN_START_POSITION, MAX_MOVES},
+    defs::{Castling, Square, FEN_START_POSITION, MAX_MOVES, Colors, Color, Pieces, ALL_SQUARES, EMPTY},
 };
 
 use if_chain::if_chain;
@@ -11,8 +10,8 @@ use std::ops::RangeInclusive;
 
 const FEN_NR_OF_PARTS: usize = 6;
 const LIST_OF_PIECES: &str = "kqrbnpKQRBNP";
-const EP_SQUARES_WHITE: RangeInclusive<Square> = Squares::A3..=Squares::H3;
-const EP_SQUARES_BLACK: RangeInclusive<Square> = Squares::A6..=Squares::H6;
+const EP_SQUARES_WHITE: RangeInclusive<Square> = ALL_SQUARES::A3 as Square..=ALL_SQUARES::H3 as Square;
+const EP_SQUARES_BLACK: RangeInclusive<Square> = ALL_SQUARES::A6 as Square..=ALL_SQUARES::H6 as Square;
 const WHITE_OR_BLACK: &str = "wb";
 const SPLITTER: char = '/';
 const DASH: char = '-';
@@ -114,52 +113,52 @@ fn pieces(board: &mut Board, part: &str) -> FenResult {
         let square = ((rank * 8) + file) as usize;
         match c {
             'k' => {
-                board.pieces[Pieces::KING] |= 1 << square;
-                board.color[Colors::BLACK] |= 1 << square;
+                board.pieces[Pieces::KING as usize] |= 1 << square;
+                board.color[Colors::BLACK as Color] |= 1 << square;
             }
             'q' => {
-                board.pieces[Pieces::QUEEN] |= 1 << square;
-                board.color[Colors::BLACK] |= 1 << square;
+                board.pieces[Pieces::QUEEN as usize] |= 1 << square;
+                board.color[Colors::BLACK as Color] |= 1 << square;
             }
             'r' => {
-                board.pieces[Pieces::ROOK] |= 1 << square;
-                board.color[Colors::BLACK] |= 1 << square;
+                board.pieces[Pieces::ROOK as usize] |= 1 << square;
+                board.color[Colors::BLACK as Color] |= 1 << square;
             }
             'b' => {
-                board.pieces[Pieces::BISHOP] |= 1 << square;
-                board.color[Colors::BLACK] |= 1 << square;
+                board.pieces[Pieces::BISHOP as usize] |= 1 << square;
+                board.color[Colors::BLACK as Color] |= 1 << square;
             }
             'n' => {
-                board.pieces[Pieces::KNIGHT] |= 1 << square;
-                board.color[Colors::BLACK] |= 1 << square;
+                board.pieces[Pieces::KNIGHT as usize] |= 1 << square;
+                board.color[Colors::BLACK as Color] |= 1 << square;
             }
             'p' => {
-                board.pieces[Pieces::PAWN] |= 1 << square;
-                board.color[Colors::BLACK] |= 1 << square;
+                board.pieces[Pieces::PAWN as usize] |= 1 << square;
+                board.color[Colors::BLACK as Color] |= 1 << square;
             }
             'K' => {
-                board.pieces[Pieces::KING] |= 1 << square;
-                board.color[Colors::WHITE] |= 1 << square;
+                board.pieces[Pieces::KING as usize] |= 1 << square;
+                board.color[Colors::WHITE as Color] |= 1 << square;
             }
             'Q' => {
-                board.pieces[Pieces::QUEEN] |= 1 << square;
-                board.color[Colors::WHITE] |= 1 << square;
+                board.pieces[Pieces::QUEEN as usize] |= 1 << square;
+                board.color[Colors::WHITE as Color] |= 1 << square;
             }
             'R' => {
-                board.pieces[Pieces::ROOK] |= 1 << square;
-                board.color[Colors::WHITE] |= 1 << square;
+                board.pieces[Pieces::ROOK as usize] |= 1 << square;
+                board.color[Colors::WHITE as Color] |= 1 << square;
             }
             'B' => {
-                board.pieces[Pieces::BISHOP] |= 1 << square;
-                board.color[Colors::WHITE] |= 1 << square;
+                board.pieces[Pieces::BISHOP as usize] |= 1 << square;
+                board.color[Colors::WHITE as Color] |= 1 << square;
             }
             'N' => {
-                board.pieces[Pieces::KNIGHT] |= 1 << square;
-                board.color[Colors::WHITE] |= 1 << square;
+                board.pieces[Pieces::KNIGHT as usize] |= 1 << square;
+                board.color[Colors::WHITE as Color] |= 1 << square;
             }
             'P' => {
-                board.pieces[Pieces::PAWN] |= 1 << square;
-                board.color[Colors::WHITE] |= 1 << square;
+                board.pieces[Pieces::PAWN as usize] |= 1 << square;
+                board.color[Colors::WHITE as Color] |= 1 << square;
             }
             '1'..='8' => {
                 if let Some(n) = c.to_digit(10) {
@@ -225,7 +224,8 @@ fn en_passant(board: &mut Board, part: &str) -> FenResult {
     }
 
     if part.len() == 2 {
-        let square = SQUARE_NAMES.iter().position(|&s| s == part);
+        let sqnames = ALL_SQUARES::iter().map(|s| s.as_string()).collect::<Vec<&str>>();
+        let square = sqnames.iter().position(|&s| s == part);
         match square {
             Some(sq) if EP_SQUARES_WHITE.contains(&sq) || EP_SQUARES_BLACK.contains(&sq) => {
                 board.en_passant = Some(sq as u8);

@@ -1,8 +1,7 @@
 use crate::{
-    board::defs::{Colors, Color, Pieces, Squares, BB_SQUARES, SQUARE_NAMES},
     board::{Board},
     board::bitboard::{Bitboard, get_bit, get_lsb, count_bits, print_bitboard, pop_bit},
-    defs::{Castling, NrOf, Piece, Square, EMPTY},
+    defs::{Castling, Colors, Color, ALL_SQUARES, Pieces, BB_SQUARES, NrOf, Piece, Square, EMPTY},
 };
 
 pub const BISHOP_RELEVANT_BITS: [i32; 64] = [
@@ -104,7 +103,7 @@ impl Sorcerer {
             }
         }
         // hopefully this will never happen
-        println!("Failed to find magic number for square {}", SQUARE_NAMES[sq]);
+        println!("Failed to find magic number for square {}", ALL_SQUARES::A1.as_string());
         0
     }
 
@@ -121,6 +120,7 @@ impl Sorcerer {
             println!("0x{:x},", self.bishop_magic_numbers[sq]);
         }
     }
+
 }
 
 pub fn mask_bishop_attacks(sq: Square) -> Bitboard {
@@ -147,7 +147,7 @@ pub fn mask_rook_attacks(sq: Square) -> Bitboard {
     attacks
 }
 
-pub fn calc_attacks(rank_dir: isize, file_dir: isize, target_rank: usize, target_file: usize, attacks: &mut Bitboard) {
+fn calc_attacks(rank_dir: isize, file_dir: isize, target_rank: usize, target_file: usize, attacks: &mut Bitboard) {
     let mut rank = (target_rank as isize) + rank_dir;
     let mut file = (target_file as isize) + file_dir;
     while ((1..=6).contains(&rank) || rank_dir == 0) && ((1..=6).contains(&file) || file_dir == 0) {
@@ -157,7 +157,7 @@ pub fn calc_attacks(rank_dir: isize, file_dir: isize, target_rank: usize, target
     }
 }
 
-pub fn calc_attacks_with_blocks(rank_dir: isize, file_dir: isize, target_rank: usize, target_file: usize, attacks: &mut Bitboard, blocks: Bitboard) {
+fn calc_attacks_with_blocks(rank_dir: isize, file_dir: isize, target_rank: usize, target_file: usize, attacks: &mut Bitboard, blocks: Bitboard) {
     let mut rank = (target_rank as isize) + rank_dir;
     let mut file = (target_file as isize) + file_dir;
     while (0..=7).contains(&rank) && (0..=7).contains(&file) {
@@ -180,6 +180,7 @@ pub fn bishop_attacks(sq: Square, blocks: Bitboard) -> Bitboard {
     for &(rank_dir, file_dir) in &[(1, 1), (-1, 1), (1, -1), (-1, -1)] {
         calc_attacks_with_blocks(rank_dir, file_dir, target_rank, target_file, &mut attacks, blocks);
     }
+
     attacks
 }
 
@@ -192,6 +193,7 @@ pub fn rook_attacks(sq: Square, blocks: Bitboard) -> Bitboard {
     for &(rank_dir, file_dir) in &[(1, 0), (-1, 0), (0, 1), (0, -1)] {
         calc_attacks_with_blocks(rank_dir, file_dir, target_rank, target_file, &mut attacks, blocks);
     }
+
     attacks
 }
 

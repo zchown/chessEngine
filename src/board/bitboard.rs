@@ -18,29 +18,35 @@ pub fn print_bitboard(bb: Bitboard) {
         println!();
     }
     println!("  a b c d e f g h");
-    println!("{:?}", bb);
+    println!("{:x}", bb);
 }
 
+#[inline(always)]
 pub fn count_bits(bb: Bitboard) -> u32 {
     bb.count_ones()
 }
 
+#[inline(always)]
 pub fn get_lsb(bb: Bitboard) -> Square {
     bb.trailing_zeros() as Square
 }
 
+#[inline(always)]
 pub fn get_bit(bb: Bitboard, sq: Square) -> bool {
     bb & (1 << sq) != 0
 }
 
+#[inline(always)]
 pub fn set_bit(bb: &mut Bitboard, sq: Square) {
     *bb |= 1 << sq;
 }
 
+#[inline(always)]
 pub fn clear_bit(bb: &mut Bitboard, sq: Square) {
     *bb &= !(1 << sq);
 }
 
+#[inline(always)]
 pub fn pop_bit(bb: &mut Bitboard, sq: Square) {
     if get_bit(*bb, sq) {
         *bb ^= 1 << sq

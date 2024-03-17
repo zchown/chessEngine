@@ -1,17 +1,15 @@
-pub mod defs;
 pub mod bitboard;
 mod fen;
 
 use std::fmt;
 
 use self::{
-    defs::{Colors, Pieces, BB_SQUARES, EMPTY, PIECE_CHARS},
     fen::FenResult,
     bitboard::{Bitboard, print_bitboard, get_bit, set_bit, clear_bit, pop_bit, count_bits, bitboard_to_array},
 
 };
 
-use crate::defs::{NrOf, Piece, Square, FEN_START_POSITION};
+use crate::defs::{Colors, Color, Pieces, BB_SQUARES, EMPTY, NrOf, Piece, Square, FEN_START_POSITION};
 
 // create a struct to represent the board with bitboards
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -52,29 +50,35 @@ impl Board {
     }
 
     // get pieces for a specific color
+
+    #[inline(always)]
     pub fn get_pieces(&self, piece: usize, color: usize) -> Bitboard {
         self.pieces[piece] & self.color[color]
     }
 
+    #[inline(always)]
     pub fn get_all_pieces(&self) -> Bitboard {
-        self.color[Colors::WHITE] | self.color[Colors::BLACK]
+        self.color[Colors::WHITE as Color] | self.color[Colors::BLACK as Color]
     }
 
+    #[inline(always)]
     pub fn remove_piece(&mut self, piece: Piece, square: Square, color: usize) {
         self.pieces[piece] ^= BB_SQUARES[square];
         self.color[color] ^= BB_SQUARES[square];
     }
 
+    #[inline(always)]
     pub fn add_piece(&mut self, piece: Piece, square: Square, color: usize) {
         self.pieces[piece] |= BB_SQUARES[square];
         self.color[color] |= BB_SQUARES[square];
     }
 
+    #[inline(always)]
     pub fn move_piece(&mut self, piece: Piece, from: Square, to: Square) {
-        let color = if self.color[Colors::WHITE] & BB_SQUARES[from] != 0 {
-            Colors::WHITE
+        let color = if self.color[Colors::WHITE as Color] & BB_SQUARES[from] != 0 {
+            Colors::WHITE as Color
         } else {
-            Colors::BLACK
+            Colors::BLACK as Color
         };
         self.remove_piece(piece, from, color);
         self.add_piece(piece, to, color);
